@@ -25,8 +25,8 @@ export default function RootLayout({
       <body className={cn(`${inter.className} min-w-[350px]`)}>
         <Navbar />
         {children}
+          <Footer />
         </body>
-        <Footer />
     </html>
   )
 }

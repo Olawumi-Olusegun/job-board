@@ -2,16 +2,19 @@ import { z } from "zod"
 import { jobTypes, locationTypes } from "./job-types";
 
 const requiredString = z.string().min(1, "Required");
+const numericRequiredString = requiredString.regex(/^\d+$/, "Must be a number");
 
-const companyLogoSchema = z.custom<File|undefined>().refine((file) => {
-    return !file || file instanceof File && file.type.startsWith("image/")
-}, "Must be an image file").refine((file) => {
+const companyLogoSchema = z.custom<File|undefined>()
+.refine((file) => {
+    return !file || (file instanceof File && file.type.startsWith("image/"))
+}, "Must be an image file")
+.refine((file) => {
     return !file || file.size < 1024 * 1024 * 2;
 }, "File must be less than 2MB");
 
 const applicationSchema = z.object({
     applicationEmail: z.string().max(100).email().optional().or(z.literal("")),
-    applicationUrl: z.string().max(100).email().optional().or(z.literal("")),
+    applicationUrl: z.string().max(100).url().optional().or(z.literal("")),
 }).refine((data) => data.applicationEmail || data.applicationUrl, {
     message: "Email or url is required",
     path: ["applicationEmail"]
@@ -25,7 +28,7 @@ const locationSchema = z.object({
     path: ["location"]
 });
 
-const numericRequiredString = requiredString.regex(/^\d+$/, "Must be a number");
+
 
 export const createJobSchema = z.object({
     title: requiredString.max(100),

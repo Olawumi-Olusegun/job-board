@@ -24,23 +24,35 @@ type Props = {}
 export default function NewJobForm({}: Props) {
 
     const form = useForm<CreateJobValues>({
-        resolver: zodResolver(createJobSchema)
-    });
+        resolver: zodResolver(createJobSchema),
+      });
+    
+      const {
+        handleSubmit,
+        watch,
+        trigger,
+        control,
+        setValue,
+        setFocus,
+        formState: { isSubmitting },
+      } = form;
 
-    const {handleSubmit, watch, trigger, control, setValue, setFocus, formState: { isSubmitting }} = form;
-
+      
     async function handleFormSubmit(values: CreateJobValues) {
+        console.log({values});
+
         const formData = new FormData();
         Object.entries(values).forEach(([key, value]) => {
-            if(value) {
-                formData.append(key, value);
+            if (value) {
+              formData.append(key, value);
             }
-        })
+          });
+      
 
         try {
             await createJobPosting(formData);
         } catch (error) {
-            
+            alert("Something went wrong, please try again.");
         }
     }
 
@@ -136,7 +148,7 @@ export default function NewJobForm({}: Props) {
 
                     <FormField control={control} name='location' render={({ field }) => (
                         <FormItem>
-                            <FormLabel>Location</FormLabel>
+                            <FormLabel>Office Location</FormLabel>
                             <FormControl>
                                 <LocationInput onLocationSelected={field.onChange} ref={field.ref} />
                             </FormControl>
@@ -208,7 +220,9 @@ export default function NewJobForm({}: Props) {
                         </FormItem>                        
                     )} />
 
-                <LoadingButton type='submit' loading={isSubmitting} />
+                <LoadingButton type='submit' loading={isSubmitting}>
+                    Save
+                </LoadingButton>
                 </form>
             </Form>
 

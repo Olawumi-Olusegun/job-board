@@ -10,7 +10,8 @@ import { redirect } from "next/navigation";
 
 export async function createJobPosting(formData: FormData) {
 
-    const values = Object.fromEntries(Object.entries(formData));
+    const values = Object.fromEntries(formData.entries());
+
 
     const {
         title,
