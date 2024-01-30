@@ -3,6 +3,7 @@ import JobListItem from './JobListItem'
 import prisma from "@/lib/db"
 import { JobFilterValue } from '@/lib/validation';
 import { Prisma } from '@prisma/client';
+import Link from 'next/link';
 
 interface JobResultProps {
   filterValues: JobFilterValue;
@@ -42,7 +43,11 @@ export default async function JobResults({filterValues}: JobResultProps) {
   return (
     <div className=" space-y-10 flex-1">
     {
-      jobs.map((jobItem) => <JobListItem key={jobItem.id} job={jobItem} /> )
+      jobs.map((jobItem) => (
+        <Link key={jobItem.id} href={`/jobs/${jobItem.slug}`} className='block'>
+          <JobListItem job={jobItem} />
+        </Link>
+      ) )
     }
     {jobs.length === 0 && (
       <p className='m-auto text-center '>

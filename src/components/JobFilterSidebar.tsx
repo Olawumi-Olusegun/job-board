@@ -7,6 +7,7 @@ import prisma from "@/lib/db"
 import { jobTypes } from "@/lib/job-types"
 import { JobFilterValue, jobFilterSchema } from '@/lib/validation';
 import { redirect } from 'next/navigation';
+import FormSubmitButton from './FormSubmitButton';
 
 type Props = {}
 
@@ -26,7 +27,6 @@ async function filterJobs(formData: FormData) {
         ...(query && { query: query.trim() }),
         ...(type && { type: type.trim() }),
         ...(remote && { remote: "true" }),
-
     });
 
     return redirect(`?${searchParams.toString()}`);
@@ -42,11 +42,11 @@ export default async function JobFilterSidebar({defaultValues}: JobFilterSidebar
 
   return (
     <aside className='md:w-[260px] sticky top-0 h-fit bg-background border rounded-lg p-4 '>
-        <form action={filterJobs}>
+        <form action={filterJobs} key={JSON.stringify(defaultValues)}>
             <div className='space-y-4'>
                 <div className='flex flex-col gap-2'>
                     <Label htmlFor='query'>Search</Label>
-                    <Input type='text' defaultValue={defaultValues.query ?? ""} placeholder='search...' name='query' id='query' required />
+                    <Input type='text' defaultValue={defaultValues.query ?? ""} placeholder='search...' name='query' id='query' />
                 </div>
                 <div className="flex flex-col gap-2">
                     <Label htmlFor="type">Type</Label>
@@ -80,7 +80,7 @@ export default async function JobFilterSidebar({defaultValues}: JobFilterSidebar
                     />
                     <Label htmlFor="remote">Remote Jobs</Label>
                 </div>
-                <Button className="w-full">Fiter Jobs</Button>
+                <FormSubmitButton >Filter Jobs</FormSubmitButton>
             </div>
         </form>
     </aside>

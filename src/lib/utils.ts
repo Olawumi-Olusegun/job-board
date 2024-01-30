@@ -16,3 +16,10 @@ export function formatCurrency(amount: number) {
 export function formatDate(from: Date) {
   return formatDistanceToNowStrict(from, { addSuffix: true });
 }
+
+export function toSlug(slugString: string) {
+  return slugString
+  .toString()
+  .replace(/ /g, "-")
+  .replace(/[^\w-]+/g, "");
+}
