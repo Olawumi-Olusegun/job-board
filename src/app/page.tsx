@@ -11,10 +11,11 @@ interface PageProps {
     type?: string;
     location?: string;
     remote?: string;
+    page?: string;
   }
 }
 
-function getTitle({ query, type, location, remote }: JobFilterValue) {
+function getTitle({ query, type, location, remote, }: JobFilterValue) {
   const titlePrefix =     query 
                             ? `${query} jobs` 
                             : type 
@@ -35,7 +36,7 @@ export function generateMetadata({searchParams}: PageProps): Metadata {
 
 export default async function Home({searchParams}:PageProps) {
 
-  const { query, type, location, remote } = searchParams;
+  const { query, type, location, remote, page } = searchParams;
 
   const filterValues: JobFilterValue = {
     query,
@@ -54,7 +55,8 @@ export default async function Home({searchParams}:PageProps) {
       </div>
       <section className="flex flex-col md:flex-row gap-4 " >
         <JobFilterSidebar defaultValues={filterValues} />
-        <JobResults filterValues={filterValues} />
+        <JobResults filterValues={filterValues} page={ page ? parseInt(page) : undefined} />
+        
       </section>
     </main>
   )

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Label } from './ui/label';
 import { Input } from './ui/input';
-import { Button } from './ui/button';
 import Select from './ui/select';
 import prisma from "@/lib/db"
 import { jobTypes } from "@/lib/job-types"
@@ -9,7 +8,7 @@ import { JobFilterValue, jobFilterSchema } from '@/lib/validation';
 import { redirect } from 'next/navigation';
 import FormSubmitButton from './FormSubmitButton';
 
-type Props = {}
+
 
 interface JobFilterSidebarProps {
     defaultValues: JobFilterValue;
@@ -38,7 +37,9 @@ export default async function JobFilterSidebar({defaultValues}: JobFilterSidebar
         where: {approved: true},
         select: { location: true },
         distinct: ["location"]
-    }).then((locations) => locations.map(({location}) => location ).filter(Boolean))) as string[]
+    })
+    .then((locations) => locations.map(({location}) => location )
+    .filter(Boolean))) as string[];
 
   return (
     <aside className='md:w-[260px] sticky top-0 h-fit bg-background border rounded-lg p-4 '>
